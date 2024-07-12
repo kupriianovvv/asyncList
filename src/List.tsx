@@ -10,12 +10,15 @@ export const List = () => {
   const [search, setSearch] = useState("");
   const [isNext, setIsNext] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const incrementPage = () => setCurrentPage((prev) => prev + 1);
+  const incrementPage = () => {
+    setStatus("loading");
+    setCurrentPage((prev) => prev + 1);
+  };
 
   useEffect(() => {
-    
+    if (status === "idle") return;
     setStatus("loading");
     fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`)
       .then((res) => {
@@ -30,8 +33,8 @@ export const List = () => {
         }>;
       })
       .then((result) => {
-        setIsNext(result.next ? true : false)
-        setItems((prevItems) => {;
+        setIsNext(result.next ? true : false);
+        setItems((prevItems) => {
           const newItems = [...(prevItems ?? []), ...result.results];
           return newItems;
         });
@@ -45,7 +48,6 @@ export const List = () => {
       });
 
     return () => {
-      setStatus("loading");
       setError(null);
     };
   }, [currentPage, search]);
@@ -71,8 +73,8 @@ export const List = () => {
           onClick={() => {
             setSearch("");
             setItems(null);
-            setCurrentPage(1);
-            setStatus('idle')
+            setCurrentPage(0);
+            setStatus("idle");
             if (ref.current) {
               ref.current.value = "";
             }
@@ -84,10 +86,10 @@ export const List = () => {
       </label>
 
       <button
-        disabled={!isNext || status === "loading"}
+        disabled={!isNext && status !== 'idle' || status === "loading"}
         onClick={incrementPage}
       >
-        increment {currentPage}
+        increment Page {currentPage}
       </button>
       {status === "idle" && <div>Ждемс</div>}
       {status === "loading" && <div>Loading</div>}
