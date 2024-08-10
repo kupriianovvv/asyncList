@@ -18,13 +18,18 @@ export const List = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     if (status === "idle") return;
     setStatus("loading");
-    fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`)
+    fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`, {
+      signal: controller.signal
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
+
         }
+        console.log(res);
         return res.json() as Promise<{
           count: number;
           next: string | null;
@@ -33,6 +38,7 @@ export const List = () => {
         }>;
       })
       .then((result) => {
+        console.log(result);
         setIsNext(result.next ? true : false);
         setItems((prevItems) => {
           const newItems = [...(prevItems ?? []), ...result.results];
@@ -43,11 +49,14 @@ export const List = () => {
         setStatus("success");
       })
       .catch((err) => {
+        if (err.name !== 'AbortError')
         setStatus("error");
         setError(err);
+        console.log(err);
       });
 
     return () => {
+      controller.abort();
       setError(null);
     };
   }, [currentPage, search]);
