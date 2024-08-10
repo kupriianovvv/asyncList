@@ -80,7 +80,7 @@ export const List = () => {
           onClick={() => {
             setSearch("");
             setItems(null);
-            setCurrentPage(0);
+            setCurrentPage(1);
             if (ref.current) {
               ref.current.value = "";
             }
