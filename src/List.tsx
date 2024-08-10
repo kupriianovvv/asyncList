@@ -4,13 +4,12 @@ import { debounce } from "./debounce";
 export const List = () => {
   const [items, setItems] = useState<Array<{ name: string }> | null>(null);
   const [error, setError] = useState<any>(null);
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "error" | "success"
-  >("idle");
+  const [status, setStatus] = useState<"loading" | "error" | "success"
+  >("loading");
   const [search, setSearch] = useState("");
   const [isNext, setIsNext] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const incrementPage = () => {
     setStatus("loading");
@@ -19,7 +18,6 @@ export const List = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    if (status === "idle") return;
     setStatus("loading");
     fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`, {
       signal: controller.signal
@@ -83,7 +81,6 @@ export const List = () => {
             setSearch("");
             setItems(null);
             setCurrentPage(0);
-            setStatus("idle");
             if (ref.current) {
               ref.current.value = "";
             }
@@ -95,12 +92,11 @@ export const List = () => {
       </label>
 
       <button
-        disabled={!isNext && status !== 'idle' || status === "loading"}
+        disabled={!isNext  || status === "loading"}
         onClick={incrementPage}
       >
         increment Page {currentPage}
       </button>
-      {status === "idle" && <div>Ждемс</div>}
       {status === "loading" && <div>Loading</div>}
       {status === "error" && <div>Что-то не так</div>}
       {status === "success" && listItems}
