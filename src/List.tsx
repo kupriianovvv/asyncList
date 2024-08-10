@@ -19,6 +19,7 @@ export const List = () => {
   useEffect(() => {
     const controller = new AbortController();
     setStatus("loading");
+    setError(null);
     fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`, {
       signal: controller.signal
     })
@@ -55,7 +56,6 @@ export const List = () => {
 
     return () => {
       controller.abort();
-      setError(null);
     };
   }, [currentPage, search]);
 
