@@ -102,7 +102,7 @@ export const List = () => {
       </button>
       {status === "idle" && <div>Ждемс</div>}
       {status === "loading" && <div>Loading</div>}
-      {status === "error" && <div>{error.message}</div>}
+      {status === "error" && <div>Что-то не так</div>}
       {status === "success" && listItems}
     </div>
   );
