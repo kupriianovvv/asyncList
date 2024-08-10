@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { debounce } from "./debounce";
 
 export const List = () => {
@@ -63,11 +63,11 @@ export const List = () => {
     ? items.map((item) => <li key={item.name}>{item.name}</li>)
     : null;
 
-  const onChangeHandler = debounce((e) => {
+  const onChangeHandler = useMemo(() =>debounce((e) => {
     setSearch(e.target.value);
     setCurrentPage(1);
     setItems(null);
-  });
+  }), []);
   return (
     <div>
       <label style={{ position: "relative" }}>
