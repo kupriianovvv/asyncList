@@ -3,7 +3,7 @@ import { debounce } from "./debounce";
 
 export const List = () => {
   const [items, setItems] = useState<Array<{ name: string }> | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [, setError] = useState<any>(null);
   const [status, setStatus] = useState<"loading" | "error" | "success"
   >("loading");
   const [search, setSearch] = useState("");
