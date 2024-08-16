@@ -106,9 +106,8 @@ export const List = () => {
           {status === "success" && <span>Increment</span>}
         </button>
       </div>
-      {status === "loading" && <div>Loading</div>}
       {status === "error" && <div>Что-то не так</div>}
-      {status === "success" && listItems}
+      {listItems}
     </div>
   );
 };
