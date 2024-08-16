@@ -40,15 +40,12 @@ export const List = () => {
         }>;
       })
       .then((result) => {
-        console.log(result);
+        setStatus("success");
         setIsNext(result.next ? true : false);
         setItems((prevItems) => {
           const newItems = [...(prevItems ?? []), ...result.results];
           return newItems;
         });
-      })
-      .then(() => {
-        setStatus("success");
       })
       .catch((err) => {
         if (err.name !== "AbortError") setStatus("error");
