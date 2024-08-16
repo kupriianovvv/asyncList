@@ -102,7 +102,8 @@ export const List = () => {
           disabled={!isNext || status === "loading"}
           onClick={incrementPage}
         >
-          increment Page {currentPage}
+          {status === "loading" && <span>Loading</span>}
+          {status === "success" && <span>Increment</span>}
         </button>
       </div>
       {status === "loading" && <div>Loading</div>}
