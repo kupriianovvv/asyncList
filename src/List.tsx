@@ -99,12 +99,10 @@ export const List = () => {
           disabled={!isNext || status === "loading"}
           onClick={incrementPage}
         >
-          {status === "loading" && <span>Loading</span>}
-          {status === "success" && <span>Increment</span>}
+          {status === "loading" ? <span>loading</span> : <span>increment</span>}
         </button>
       </div>
-      {status === "error" && <div>Что-то не так</div>}
-      {listItems}
+      {status === "error" ? <div>Что-то не так</div> : listItems}
     </div>
   );
 };
