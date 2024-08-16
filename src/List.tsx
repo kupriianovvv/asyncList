@@ -4,8 +4,9 @@ import { debounce } from "./debounce";
 export const List = () => {
   const [items, setItems] = useState<Array<{ name: string }> | null>(null);
   const [, setError] = useState<any>(null);
-  const [status, setStatus] = useState<"loading" | "error" | "success"
-  >("loading");
+  const [status, setStatus] = useState<"loading" | "error" | "success">(
+    "loading"
+  );
   const [search, setSearch] = useState("");
   const [isNext, setIsNext] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
@@ -20,13 +21,15 @@ export const List = () => {
     const controller = new AbortController();
     setStatus("loading");
     setError(null);
-    fetch(`https://swapi.dev/api/people/?search=${search}&page=${currentPage}`, {
-      signal: controller.signal
-    })
+    fetch(
+      `https://swapi.dev/api/people/?search=${search}&page=${currentPage}`,
+      {
+        signal: controller.signal,
+      }
+    )
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
-
         }
         console.log(res);
         return res.json() as Promise<{
@@ -48,8 +51,7 @@ export const List = () => {
         setStatus("success");
       })
       .catch((err) => {
-        if (err.name !== 'AbortError')
-        setStatus("error");
+        if (err.name !== "AbortError") setStatus("error");
         setError(err);
         console.log(err);
       });
@@ -63,11 +65,15 @@ export const List = () => {
     ? items.map((item) => <li key={item.name}>{item.name}</li>)
     : null;
 
-  const onChangeHandler = useMemo(() =>debounce((e) => {
-    setSearch(e.target.value);
-    setCurrentPage(1);
-    setItems(null);
-  }), []);
+  const onChangeHandler = useMemo(
+    () =>
+      debounce((e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+        setItems(null);
+      }),
+    []
+  );
   return (
     <div>
       <label style={{ position: "relative" }}>
@@ -91,12 +97,14 @@ export const List = () => {
         </button>
       </label>
 
-      <button
-        disabled={!isNext  || status === "loading"}
-        onClick={incrementPage}
-      >
-        increment Page {currentPage}
-      </button>
+      <div>
+        <button
+          disabled={!isNext || status === "loading"}
+          onClick={incrementPage}
+        >
+          increment Page {currentPage}
+        </button>
+      </div>
       {status === "loading" && <div>Loading</div>}
       {status === "error" && <div>Что-то не так</div>}
       {status === "success" && listItems}
