@@ -1,5 +1,13 @@
+import { List } from "./components/List";
+
 const App = () => {
-  return <>App</>;
+  return (
+    <main>
+      <div>
+        <List />
+      </div>
+    </main>
+  );
 };
 
 export default App;
