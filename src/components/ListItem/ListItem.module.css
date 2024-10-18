@@ -1,0 +1,6 @@
+.ListItem {
+    border: 2px solid black;
+    width: calc(100%);
+    padding: 20px;
+    border-radius: 10px;
+}
