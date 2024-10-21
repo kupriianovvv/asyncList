@@ -1,7 +1,8 @@
-import styles from './ListItem.module.css'
+import styles from "./ListItem.module.css";
 
-export const ListItem = () => {
-    return <li className={styles['ListItem']}>
-        ListItem
-    </li>
-}
+type ListItemProps = {
+  children: string;
+};
+export const ListItem = ({ children }: ListItemProps) => {
+  return <li className={styles["ListItem"]}>{children}</li>;
+};
