@@ -20,14 +20,6 @@ export const ListItems = ({ page }: ListItemsProps) => {
     });
   }, [data]);
 
-  if (status === "loading") {
-    return <div>loading</div>;
-  }
-
-  if (status === "error") {
-    return <div>error</div>;
-  }
-
   const renderItems = listItems.map((item) => {
     return <ListItem key={item.name}>{item.name}</ListItem>;
   });
