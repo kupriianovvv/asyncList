@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ListItem } from "../ListItem/ListItem";
 import styles from "./ListItems.module.css";
 import { useAsync } from "../../hooks/useAsync";
@@ -8,6 +8,15 @@ export const ListItems = () => {
   const [page, setPage] = useState(1);
   const params = useMemo(() => [page], [page]);
   const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
+  const [listItems, setListItems] = useState<{ name: string }[]>([]);
+
+  useEffect(() => {
+    const newItems = data?.results ?? [];
+    setListItems(prevListItems => {
+      return [...prevListItems, ...newItems]
+    })
+  }, [data])
+
 
   if (status === "loading") {
     return <div>loading</div>;
@@ -17,8 +26,7 @@ export const ListItems = () => {
     return <div>error</div>;
   }
 
-  const items = data?.results ?? [];
-  const renderItems = items.map((item) => {
+  const renderItems = listItems.map((item) => {
     return <ListItem key={item.name}>{item.name}</ListItem>;
   });
 
