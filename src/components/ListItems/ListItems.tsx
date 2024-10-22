@@ -6,11 +6,9 @@ import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { RawData } from "../../types/rawData";
 
 type ListItemsProps = {
-  page: number;
+  data: any;
 };
-export const ListItems = ({ page }: ListItemsProps) => {
-  const params = useMemo(() => [page], [page]);
-  const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
+export const ListItems = ({ data }: ListItemsProps) => {
   const [listItems, setListItems] = useState<{ name: string }[]>([]);
 
   useEffect(() => {
