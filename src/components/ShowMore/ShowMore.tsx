@@ -1,5 +1,8 @@
 import styles from './ShowMore.module.css'
 
-export const ShowMore = () => {
-  return <button className={styles['ShowMoreButton']}>Показать еще</button>;
+type ShowMoreProps = {
+  incrementPage: () => void
+}
+export const ShowMore = ({ incrementPage }: ShowMoreProps) => {
+  return <button onClick={incrementPage} className={styles['ShowMoreButton']}>Показать еще</button>;
 };
