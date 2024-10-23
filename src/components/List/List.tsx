@@ -32,10 +32,15 @@ export const List = () => {
     setListItems([]);
     setPage(1);
   };
+  const onReset = () => {
+    setSearch("");
+    setListItems([]);
+    setPage(1);
+  };
   return (
     <article className={styles.List}>
       <div className={styles["List-Wrapper"]}>
-        <Input search={search} onChange={onChange} />
+        <Input search={search} onChange={onChange} onReset={onReset}/>
         <ListItems listItems={listItems} />
         <ShowMore
           incrementPage={incrementPage}
