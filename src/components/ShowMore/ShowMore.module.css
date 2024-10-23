@@ -1,3 +1,7 @@
+.ShowMoreWrapper {
+    position: relative;
+}
+
 .ShowMoreButton {
     margin-top: 30px;
     background-color: lightgreen;
