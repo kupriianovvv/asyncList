@@ -12,6 +12,7 @@ export const List = () => {
 
   const params = useMemo(() => [page], [page]);
   const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
+  const isNext = Boolean(data?.next);
 
   const incrementPage = () => {
     setPage((prevPage) => prevPage + 1);
@@ -20,8 +21,12 @@ export const List = () => {
     <article className={styles.List}>
       <div className={styles["List-Wrapper"]}>
         <Input />
-        <ListItems data={data}/>
-        <ShowMore incrementPage={incrementPage} status={status}/>
+        <ListItems data={data} />
+        <ShowMore
+          incrementPage={incrementPage}
+          status={status}
+          isNext={isNext}
+        />
       </div>
     </article>
   );
