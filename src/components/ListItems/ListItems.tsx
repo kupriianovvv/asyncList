@@ -6,18 +6,9 @@ import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { RawData } from "../../types/rawData";
 
 type ListItemsProps = {
-  data: any;
+  listItems: any;
 };
-export const ListItems = ({ data }: ListItemsProps) => {
-  const [listItems, setListItems] = useState<{ name: string }[]>([]);
-
-  useEffect(() => {
-    const newItems = data?.results ?? [];
-    setListItems((prevListItems) => {
-      return [...prevListItems, ...newItems];
-    });
-  }, [data]);
-
+export const ListItems = ({ listItems }: ListItemsProps) => {
   const renderItems = listItems.map((item) => {
     return <ListItem key={item.name}>{item.name}</ListItem>;
   });
