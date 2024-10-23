@@ -1,6 +1,6 @@
-export const fetchPageByPageNumber = <TData>(pageNumber: number) => {
+export const fetchPageByPageNumber = <TData>(pageNumber: number, search: string) => {
   const data = fetch(
-    `https://swapi.dev/api/people/?search=&page=${pageNumber}`
+    `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`
   )
     .then((response) => {
       if (!response.ok) {
