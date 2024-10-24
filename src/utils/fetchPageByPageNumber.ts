@@ -1,6 +1,13 @@
-export const fetchPageByPageNumber = <TData>(pageNumber: number, search: string) => {
+export const fetchPageByPageNumber = <TData>(
+  pageNumber: number,
+  search: string,
+  signal: AbortController["signal"]
+) => {
   const data = fetch(
-    `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`
+    `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`,
+    {
+      signal,
+    }
   )
     .then((response) => {
       if (!response.ok) {

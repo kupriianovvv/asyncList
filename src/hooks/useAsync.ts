@@ -11,12 +11,14 @@ export const useAsync = <TData, TError = unknown>(
   );
   const [data, setData] = useState<TData | null>(null);
   const [error, setError] = useState<TError | null>(null);
-  
-  const queryFnRef = useLatest<QueryFn<TData>>(queryFn)
+
+  const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
 
   useEffect(() => {
     setStatus("loading");
-    queryFnRef.current(...deps)
+    const abortController = new AbortController();
+    queryFnRef
+      .current(...deps, abortController.signal)
       .then((data) => {
         setData(data);
         setStatus("success");
@@ -25,13 +27,17 @@ export const useAsync = <TData, TError = unknown>(
         setError(error);
         setStatus("error");
       });
+
+    return () => {
+      abortController.abort();
+    };
   }, [deps, queryFnRef]);
 
   return useMemo(() => {
     return {
       data,
       status,
-      error
-    }
-  }, [data, status, error])
+      error,
+    };
+  }, [data, status, error]);
 };
