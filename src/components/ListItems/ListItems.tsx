@@ -2,7 +2,7 @@ import { ListItem } from "../ListItem/ListItem";
 import styles from "./ListItems.module.css";
 
 type ListItemsProps = {
-  listItems: any;
+  listItems: Array<{name: string}>
 };
 export const ListItems = ({ listItems }: ListItemsProps) => {
   const renderItems = listItems.map((item) => {
