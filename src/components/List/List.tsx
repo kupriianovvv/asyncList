@@ -6,12 +6,15 @@ import styles from "./List.module.css";
 import { useAsync } from "../../hooks/useAsync";
 import { RawData } from "../../types/rawData";
 import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
+import { debounce } from "../../utils/debounce";
+import { useUpdateEffect } from "../../hooks/useUpdateEffect";
 
 export const List = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const params = useMemo(() => [page, search], [page, search]);
+  const params = useMemo(() => [page, debouncedSearch], [page, debouncedSearch]);
   const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
   const [listItems, setListItems] = useState<{ name: string }[]>([]);
 
@@ -22,6 +25,18 @@ export const List = () => {
     });
   }, [data]);
 
+  console.log(debouncedSearch)
+  const debouncedSetDebouncedSearch = useMemo(() => debounce((value) => {
+    setDebouncedSearch(value)
+    setPage(1);
+  }, 400), [])
+  useUpdateEffect(() => {
+      debouncedSetDebouncedSearch(search);
+  }, [search])
+  useUpdateEffect(() => {
+    setListItems([]);
+  }, [debouncedSearch])
+
   const isNext = Boolean(data?.next);
 
   const incrementPage = () => {
@@ -29,12 +44,11 @@ export const List = () => {
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-    setListItems([]);
-    setPage(1);
   };
   const onReset = () => {
-    setSearch("");
     setListItems([]);
+    setSearch("");
+    setDebouncedSearch("");
     setPage(1);
   };
   return (
