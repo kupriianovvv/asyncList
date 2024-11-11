@@ -14,28 +14,23 @@ export const List = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const params = useMemo(() => [page, debouncedSearch], [page, debouncedSearch]);
+  const params = useMemo(
+    () => [page, debouncedSearch],
+    [page, debouncedSearch]
+  );
   const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
-  const [listItems, setListItems] = useState<{ name: string }[]>([]);
 
-  useEffect(() => {
-    const newItems = data?.results ?? [];
-    setListItems((prevListItems) => {
-      return [...prevListItems, ...newItems];
-    });
-  }, [data]);
-
-  console.log(debouncedSearch)
-  const debouncedSetDebouncedSearch = useMemo(() => debounce((value) => {
-    setDebouncedSearch(value)
-    setPage(1);
-  }, 400), [])
+  const debouncedSetDebouncedSearch = useMemo(
+    () =>
+      debounce((value) => {
+        setDebouncedSearch(value);
+        setPage(1);
+      }, 400),
+    []
+  );
   useUpdateEffect(() => {
-      debouncedSetDebouncedSearch(search);
-  }, [search])
-  useUpdateEffect(() => {
-    setListItems([]);
-  }, [debouncedSearch])
+    debouncedSetDebouncedSearch(search);
+  }, [search]);
 
   const isNext = Boolean(data?.next);
 
@@ -46,7 +41,6 @@ export const List = () => {
     setSearch(event.target.value);
   };
   const onReset = () => {
-    setListItems([]);
     setSearch("");
     setDebouncedSearch("");
     setPage(1);
@@ -54,8 +48,8 @@ export const List = () => {
   return (
     <article className={styles.List}>
       <div className={styles["List-Wrapper"]}>
-        <Input search={search} onChange={onChange} onReset={onReset}/>
-        <ListItems listItems={listItems} />
+        <Input search={search} onChange={onChange} onReset={onReset} />
+        <ListItems listItems={data?.results || []} />
         <ShowMore
           incrementPage={incrementPage}
           status={status}
