@@ -8,6 +8,7 @@ import { RawData } from "../../types/rawData";
 import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { debounce } from "../../utils/debounce";
 import { useUpdateEffect } from "../../hooks/useUpdateEffect";
+import { useFlattenData } from "../../hooks/useFlattenData";
 
 export const List = () => {
   const [page, setPage] = useState(1);
@@ -45,11 +46,12 @@ export const List = () => {
     setDebouncedSearch("");
     setPage(1);
   };
+  const flattenedData = useFlattenData(data);
   return (
     <article className={styles.List}>
       <div className={styles["List-Wrapper"]}>
         <Input search={search} onChange={onChange} onReset={onReset} />
-        <ListItems listItems={data?.results || []} />
+        <ListItems listItems={flattenedData || []} />
         <ShowMore
           incrementPage={incrementPage}
           status={status}
