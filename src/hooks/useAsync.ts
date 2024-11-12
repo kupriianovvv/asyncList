@@ -9,7 +9,7 @@ export const useAsync = <TData, TError = unknown>(
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
-  const [data, setData] = useState<TData | null>(null);
+  const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
@@ -20,7 +20,7 @@ export const useAsync = <TData, TError = unknown>(
     queryFnRef
       .current(...deps, abortController.signal)
       .then((data) => {
-        setData(data);
+        setData([data]);
         setStatus("success");
       })
       .catch((error) => {
