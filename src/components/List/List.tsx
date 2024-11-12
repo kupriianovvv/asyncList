@@ -19,7 +19,7 @@ export const List = () => {
     () => [page, debouncedSearch],
     [page, debouncedSearch]
   );
-  const { data, status } = useAsync<RawData>(fetchPageByPageNumber, params);
+  const { data, status, isNextAvailable } = useAsync<RawData>(fetchPageByPageNumber, params);
 
   const debouncedSetDebouncedSearch = useMemo(
     () =>
@@ -32,8 +32,6 @@ export const List = () => {
   useUpdateEffect(() => {
     debouncedSetDebouncedSearch(search);
   }, [search]);
-
-  const isNext = Boolean(data?.next);
 
   const incrementPage = () => {
     setPage((prevPage) => prevPage + 1);
@@ -55,7 +53,7 @@ export const List = () => {
         <ShowMore
           incrementPage={incrementPage}
           status={status}
-          isNext={isNext}
+          isNext={isNextAvailable}
         />
       </div>
     </article>

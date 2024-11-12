@@ -14,6 +14,8 @@ export const useAsync = <TData, TError = unknown>(
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
 
+  const isNextAvailable = Boolean(data?.[0]?.next)
+
   useEffect(() => {
     setStatus("loading");
     const abortController = new AbortController();
@@ -38,6 +40,7 @@ export const useAsync = <TData, TError = unknown>(
       data,
       status,
       error,
+      isNextAvailable
     };
-  }, [data, status, error]);
+  }, [data, status, error, isNextAvailable]);
 };
