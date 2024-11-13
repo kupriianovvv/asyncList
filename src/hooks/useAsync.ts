@@ -16,11 +16,21 @@ export const useAsync = <TData, TError = unknown>(
 
   const isNextAvailable = Boolean(data?.[0]?.next)
 
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const getNewPage = () => {
+    setPageNumber(prevNumber => prevNumber + 1)
+  }
+
+  const resetPage = () => {
+    setPageNumber(1)
+  }
+
   useEffect(() => {
     setStatus("loading");
     const abortController = new AbortController();
     queryFnRef
-      .current(...deps, abortController.signal)
+      .current(pageNumber, ...deps, abortController.signal)
       .then((data) => {
         setData([data]);
         setStatus("success");
@@ -33,14 +43,17 @@ export const useAsync = <TData, TError = unknown>(
     return () => {
       abortController.abort();
     };
-  }, [deps, queryFnRef]);
+  }, [deps, queryFnRef, pageNumber]);
 
   return useMemo(() => {
     return {
       data,
       status,
       error,
-      isNextAvailable
+      isNextAvailable,
+      getNewPage,
+      pageNumber,
+      resetPage
     };
-  }, [data, status, error, isNextAvailable]);
+  }, [data, status, error, isNextAvailable, pageNumber]);
 };

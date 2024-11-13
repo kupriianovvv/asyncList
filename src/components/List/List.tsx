@@ -11,21 +11,18 @@ import { useUpdateEffect } from "../../hooks/useUpdateEffect";
 import { useFlattenData } from "../../hooks/useFlattenData";
 
 export const List = () => {
-  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const params = useMemo(
-    () => [page, debouncedSearch],
-    [page, debouncedSearch]
-  );
-  const { data, status, isNextAvailable } = useAsync<RawData>(fetchPageByPageNumber, params);
+  const params = useMemo(() => [debouncedSearch], [debouncedSearch]);
+  const { data, status, isNextAvailable, getNewPage, resetPage } =
+    useAsync<RawData>(fetchPageByPageNumber, params);
 
   const debouncedSetDebouncedSearch = useMemo(
     () =>
       debounce((value) => {
         setDebouncedSearch(value);
-        setPage(1);
+        resetPage()
       }, 400),
     []
   );
@@ -33,16 +30,13 @@ export const List = () => {
     debouncedSetDebouncedSearch(search);
   }, [search]);
 
-  const incrementPage = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
   const onReset = () => {
     setSearch("");
     setDebouncedSearch("");
-    setPage(1);
+    resetPage()
   };
   const flattenedData = useFlattenData(data);
   return (
@@ -51,7 +45,7 @@ export const List = () => {
         <Input search={search} onChange={onChange} onReset={onReset} />
         <ListItems listItems={flattenedData || []} />
         <ShowMore
-          incrementPage={incrementPage}
+          incrementPage={getNewPage}
           status={status}
           isNext={isNextAvailable}
         />
