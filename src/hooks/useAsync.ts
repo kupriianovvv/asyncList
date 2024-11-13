@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 
@@ -14,17 +14,23 @@ export const useAsync = <TData, TError = unknown>(
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
 
-  const isNextAvailable = Boolean(data?.[0]?.next)
+  const isNextAvailable = Boolean(data?.at(-1)?.next);
 
   const [pageNumber, setPageNumber] = useState(1);
 
+  const pageRef = useRef(1);
+
   const getNewPage = () => {
-    setPageNumber(prevNumber => prevNumber + 1)
-  }
+    setPageNumber((prevNumber) => {
+      pageRef.current = prevNumber;
+      return prevNumber + 1;
+    });
+  };
 
   const resetPage = () => {
-    setPageNumber(1)
-  }
+    pageRef.current = 1;
+    setPageNumber(1);
+  };
 
   useEffect(() => {
     setStatus("loading");
@@ -32,7 +38,11 @@ export const useAsync = <TData, TError = unknown>(
     queryFnRef
       .current(pageNumber, ...deps, abortController.signal)
       .then((data) => {
-        setData([data]);
+        if (pageNumber === pageRef.current) {
+          setData([data]);
+        } else {
+          setData((prev) => [...(prev ?? []), data]);
+        }
         setStatus("success");
       })
       .catch((error) => {
@@ -53,7 +63,7 @@ export const useAsync = <TData, TError = unknown>(
       isNextAvailable,
       getNewPage,
       pageNumber,
-      resetPage
+      resetPage,
     };
   }, [data, status, error, isNextAvailable, pageNumber]);
 };
