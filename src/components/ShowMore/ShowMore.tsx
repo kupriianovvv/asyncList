@@ -1,12 +1,10 @@
-import { Spinner } from "../Spinner";
 import styles from "./ShowMore.module.css";
 
 type ShowMoreProps = {
   incrementPage: () => void;
-  status: "loading" | "success" | "error";
   isNext: boolean;
 };
-export const ShowMore = ({ incrementPage, status, isNext }: ShowMoreProps) => {
+export const ShowMore = ({ incrementPage, isNext }: ShowMoreProps) => {
   const isLoading = status === "loading";
   return (
     <div className={styles["ShowMoreWrapper"]}>
@@ -17,7 +15,6 @@ export const ShowMore = ({ incrementPage, status, isNext }: ShowMoreProps) => {
       >
         Показать еще
       </button>
-      {isLoading && <Spinner />}
     </div>
   );
 };

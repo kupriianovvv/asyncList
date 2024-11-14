@@ -6,6 +6,8 @@
   margin: 0 auto;
   padding: 20px;
   padding-right: 0;
+
+  position: relative
 }
 
 .List-Wrapper {

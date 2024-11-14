@@ -9,12 +9,16 @@ import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { debounce } from "../../utils/debounce";
 import { useUpdateEffect } from "../../hooks/useUpdateEffect";
 import { useFlattenData } from "../../hooks/useFlattenData";
+import { Spinner } from "../Spinner";
 
 export const List = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const params = useMemo(() => ({ search: debouncedSearch }), [debouncedSearch]);
+  const params = useMemo(
+    () => ({ search: debouncedSearch }),
+    [debouncedSearch]
+  );
   const { data, status, isNextAvailable, getNewPage, resetPage } =
     useAsync<RawData>(fetchPageByPageNumber, params);
 
@@ -44,11 +48,8 @@ export const List = () => {
       <div className={styles["List-Wrapper"]}>
         <Input search={search} onChange={onChange} onReset={onReset} />
         <ListItems listItems={flattenedData || []} />
-        <ShowMore
-          incrementPage={getNewPage}
-          status={status}
-          isNext={isNextAvailable}
-        />
+        <ShowMore incrementPage={getNewPage} isNext={isNextAvailable} />
+        {status === "loading" && <Spinner />}
       </div>
     </article>
   );
