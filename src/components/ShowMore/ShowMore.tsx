@@ -1,16 +1,15 @@
 import styles from "./ShowMore.module.css";
 
 type ShowMoreProps = {
-  incrementPage: () => void;
-  isNext: boolean;
+  onClick: React.MouseEventHandler
+  disabled: boolean
 };
-export const ShowMore = ({ incrementPage, isNext }: ShowMoreProps) => {
-  const isLoading = status === "loading";
+export const ShowMore = ({ onClick, disabled}: ShowMoreProps) => {
   return (
     <div className={styles["ShowMoreWrapper"]}>
       <button
-        disabled={isLoading || !isNext}
-        onClick={incrementPage}
+        disabled={disabled}
+        onClick={onClick}
         className={styles["ShowMoreButton"]}
       >
         Показать еще

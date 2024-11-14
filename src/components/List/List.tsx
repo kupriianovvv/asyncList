@@ -48,7 +48,10 @@ export const List = () => {
       <div className={styles["List-Wrapper"]}>
         <Input search={search} onChange={onChange} onReset={onReset} />
         <ListItems listItems={flattenedData || []} />
-        <ShowMore incrementPage={getNewPage} isNext={isNextAvailable} />
+        <ShowMore
+          onClick={getNewPage}
+          disabled={!isNextAvailable || status === "loading"}
+        />
         {status === "loading" && <Spinner />}
       </div>
     </article>
