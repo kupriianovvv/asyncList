@@ -9,8 +9,8 @@ type InputProps = {
 export const Input = ({ search, onChange, onReset }: InputProps) => {
   return (
     <div style={{ position: "relative" }}>
-      <input className={styles["Input"]} value={search} onChange={onChange}/>
-      <ResetButton onClick={onReset}/>
+      <input className={styles["Input"]} value={search} onChange={onChange} />
+      <ResetButton onClick={onReset} />
     </div>
   );
 };

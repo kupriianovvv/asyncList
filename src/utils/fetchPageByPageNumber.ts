@@ -11,7 +11,7 @@ export const fetchPageByPageNumber = <TData>({
     `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`,
     {
       signal,
-    }
+    },
   )
     .then((response) => {
       if (!response.ok) {

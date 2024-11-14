@@ -1,19 +1,19 @@
 .ShowMoreWrapper {
-    position: relative;
+  position: relative;
 }
 
 .ShowMoreButton {
-    margin-top: 30px;
-    background-color: lightgreen;
-    border: 2px solid black;
-    border-radius: 8px;
-    padding: 10px 100px;
+  margin-top: 30px;
+  background-color: lightgreen;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 10px 100px;
 
-    display: block;
-    margin: 0 auto;
-    margin-top: 10px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
 }
 
 .ShowMoreButton:active {
-    background-color: hsl(71, 73%, 30%);
+  background-color: hsl(71, 73%, 30%);
 }

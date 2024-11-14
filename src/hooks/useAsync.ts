@@ -4,13 +4,13 @@ import { useLatest } from "./useLatest";
 
 export const useAsync = <
   TData extends { next: string | null },
-  TError = unknown
+  TError = unknown,
 >(
   queryFn: QueryFn<TData>,
-  deps: Record<string, unknown>
+  deps: Record<string, unknown>,
 ) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
+    "loading",
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);

@@ -1,10 +1,10 @@
 import styles from "./ShowMore.module.css";
 
 type ShowMoreProps = {
-  onClick: React.MouseEventHandler
-  disabled: boolean
+  onClick: React.MouseEventHandler;
+  disabled: boolean;
 };
-export const ShowMore = ({ onClick, disabled}: ShowMoreProps) => {
+export const ShowMore = ({ onClick, disabled }: ShowMoreProps) => {
   return (
     <div className={styles["ShowMoreWrapper"]}>
       <button
