@@ -14,7 +14,7 @@ export const List = () => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const params = useMemo(() => [debouncedSearch], [debouncedSearch]);
+  const params = useMemo(() => ({ search: debouncedSearch }), [debouncedSearch]);
   const { data, status, isNextAvailable, getNewPage, resetPage } =
     useAsync<RawData>(fetchPageByPageNumber, params);
 
@@ -22,7 +22,7 @@ export const List = () => {
     () =>
       debounce((value) => {
         setDebouncedSearch(value);
-        resetPage()
+        resetPage();
       }, 400),
     []
   );
@@ -36,7 +36,7 @@ export const List = () => {
   const onReset = () => {
     setSearch("");
     setDebouncedSearch("");
-    resetPage()
+    resetPage();
   };
   const flattenedData = useFlattenData(data);
   return (

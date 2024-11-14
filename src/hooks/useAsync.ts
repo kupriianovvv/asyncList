@@ -2,9 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 
-export const useAsync = <TData extends { next: string | null }, TError = unknown>(
+export const useAsync = <
+  TData extends { next: string | null },
+  TError = unknown
+>(
   queryFn: QueryFn<TData>,
-  deps: Array<unknown>
+  deps: Record<string, unknown>
 ) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -36,7 +39,7 @@ export const useAsync = <TData extends { next: string | null }, TError = unknown
     setStatus("loading");
     const abortController = new AbortController();
     queryFnRef
-      .current(pageNumber, ...deps, abortController.signal)
+      .current({ pageNumber, signal: abortController.signal, ...deps })
       .then((data) => {
         if (pageNumber === pageRef.current) {
           setData([data]);

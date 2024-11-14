@@ -1,8 +1,12 @@
-export const fetchPageByPageNumber = <TData>(
-  pageNumber: number,
-  search: string,
-  signal: AbortController["signal"]
-) => {
+export const fetchPageByPageNumber = <TData>({
+  pageNumber,
+  search,
+  signal,
+}: {
+  pageNumber: number;
+  search: string;
+  signal: AbortController["signal"];
+}) => {
   const data = fetch(
     `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`,
     {
