@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 
-export const useAsync = <TData, TError = unknown>(
+export const useAsync = <TData extends { next: string | null }, TError = unknown>(
   queryFn: QueryFn<TData>,
   deps: Array<unknown>
 ) => {
@@ -14,7 +14,7 @@ export const useAsync = <TData, TError = unknown>(
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
 
-  const isNextAvailable = Boolean(data?.at(-1)?.next);
+  const isNextAvailable = Boolean(data?.[data.length - 1]?.next);
 
   const [pageNumber, setPageNumber] = useState(1);
 
