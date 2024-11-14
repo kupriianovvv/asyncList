@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "../Input";
 import { ListItems } from "../ListItems";
 import { ShowMore } from "../ShowMore";
