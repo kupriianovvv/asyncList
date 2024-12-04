@@ -8,7 +8,7 @@ import { RawData } from "../../types/rawData";
 import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { debounce } from "../../utils/debounce";
 import { useUpdateEffect } from "../../hooks/useUpdateEffect";
-import { useFlattenData } from "../../hooks/useFlattenData";
+import { useFlattenData, useFlattenData2 } from "../../hooks/useFlattenData";
 import { Spinner } from "../Spinner";
 
 export const List = () => {
@@ -17,7 +17,7 @@ export const List = () => {
 
   const params = useMemo(
     () => ({ search: debouncedSearch }),
-    [debouncedSearch],
+    [debouncedSearch]
   );
   const { data, status, isNextAvailable, getNewPage, resetPage } =
     useAsync<RawData>(fetchPageByPageNumber, params);
@@ -28,7 +28,7 @@ export const List = () => {
         setDebouncedSearch(value);
         resetPage();
       }, 400),
-    [],
+    []
   );
   useUpdateEffect(() => {
     debouncedSetDebouncedSearch(search);

@@ -1,10 +1,9 @@
+import { useMemo } from "react";
 import { RawData } from "../types/rawData";
 
 export const useFlattenData = (data: RawData[] | null) => {
-  if (!data) return null;
-  const flattenedData = data.reduce<RawData["results"]>((accum, item) => {
-    accum.push(...item.results);
-    return accum;
-  }, []);
-  return flattenedData;
+  return useMemo(() => {
+    if (!data) return null;
+    return data.flatMap((item) => item.results);
+  }, [data]);
 };
