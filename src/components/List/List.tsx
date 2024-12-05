@@ -20,7 +20,12 @@ export const List = () => {
     [debouncedSearch]
   );
   const { data, status, isNextAvailable, getNewPage, resetPage } =
-    useAsync<RawData>(fetchPageByPageNumber, params);
+    useAsync<RawData>(fetchPageByPageNumber, params, (data) => {
+      if (!data.next) {
+        return null;
+      }
+      return new URL(data.next).searchParams.get("page");
+    });
 
   const debouncedSetDebouncedSearch = useMemo(
     () =>

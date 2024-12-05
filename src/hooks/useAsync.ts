@@ -2,22 +2,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 
-export const useAsync = <
-  TData extends { next: string | null },
-  TError = unknown,
->(
+export const useAsync = <TData, TError = unknown>(
   queryFn: QueryFn<TData>,
   deps: Record<string, unknown>,
+  getNextPageParam: (data: TData) => number | string | null
 ) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading",
+    "loading"
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
 
-  const isNextAvailable = Boolean(data?.[data.length - 1]?.next);
+  const isNextAvailable = data
+    ? getNextPageParam(data[data.length - 1])
+    : undefined;
 
   const [pageNumber, setPageNumber] = useState(1);
 
