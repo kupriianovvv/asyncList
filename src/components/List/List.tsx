@@ -8,7 +8,7 @@ import { RawData } from "../../types/rawData";
 import { fetchPageByPageNumber } from "../../utils/fetchPageByPageNumber";
 import { debounce } from "../../utils/debounce";
 import { useUpdateEffect } from "../../hooks/useUpdateEffect";
-import { useFlattenData, useFlattenData2 } from "../../hooks/useFlattenData";
+import { useFlattenData } from "../../hooks/useFlattenData";
 import { Spinner } from "../Spinner";
 
 export const List = () => {
