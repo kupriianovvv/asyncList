@@ -12,8 +12,10 @@ export const useAsync = <TData, TError = unknown>(
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
+  const [counter, setCounter] = useState(1);
 
   const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
+  const searchRef = useRef<unknown>(null);
 
   const isNextAvailable = data
     ? getNextPageParam(data[data.length - 1])
@@ -36,8 +38,19 @@ export const useAsync = <TData, TError = unknown>(
   };
 
   useEffect(() => {
+    setPageNumber(1);
+    pageRef.current = 1;
+    setCounter((prev) => prev + 1);
+  }, [deps]);
+
+  useEffect(() => {
+    if (counter === 1) return;
     setStatus("loading");
     const abortController = new AbortController();
+    if (searchRef.current !== deps.search) {
+      setPageNumber(1);
+      setCounter((prev) => prev + 1);
+    }
     queryFnRef
       .current({ pageNumber, signal: abortController.signal, ...deps })
       .then((data) => {
@@ -49,6 +62,9 @@ export const useAsync = <TData, TError = unknown>(
         setStatus("success");
       })
       .catch((error) => {
+        if (error.name === "AbortError") {
+          return;
+        }
         setError(error);
         setStatus("error");
       });
@@ -56,7 +72,11 @@ export const useAsync = <TData, TError = unknown>(
     return () => {
       abortController.abort();
     };
-  }, [deps, queryFnRef, pageNumber]);
+  }, [queryFnRef, pageNumber, counter]);
+
+  useEffect(() => {
+    searchRef.current = deps.search;
+  }, [deps.search]);
 
   return useMemo(() => {
     return {

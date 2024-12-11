@@ -19,19 +19,21 @@ export const List = () => {
     () => ({ search: debouncedSearch }),
     [debouncedSearch]
   );
-  const { data, status, isNextAvailable, getNewPage, resetPage } =
-    useAsync<RawData>(fetchPageByPageNumber, params, (data) => {
+  const { data, status, isNextAvailable, getNewPage } = useAsync<RawData>(
+    fetchPageByPageNumber,
+    params,
+    (data) => {
       if (!data.next) {
         return null;
       }
       return new URL(data.next).searchParams.get("page");
-    });
+    }
+  );
 
   const debouncedSetDebouncedSearch = useMemo(
     () =>
       debounce((value) => {
         setDebouncedSearch(value);
-        resetPage();
       }, 400),
     []
   );
@@ -45,7 +47,6 @@ export const List = () => {
   const onReset = () => {
     setSearch("");
     setDebouncedSearch("");
-    resetPage();
   };
   const flattenedData = useFlattenData(data);
   return (
