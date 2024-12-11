@@ -2,9 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 
-export const useAsync = <TData, TError = unknown>(
-  queryFn: QueryFn<TData>,
-  deps: Record<string, unknown>,
+export const useAsync = <
+  TData,
+  TParams = Record<string, unknown>,
+  TError = unknown,
+>(
+  queryFn: QueryFn<
+    TData,
+    { pageNumber: number; signal: AbortController["signal"] } & TParams
+  >,
+  deps: TParams,
   getNextPageParam: (data: TData) => number | string | null
 ) => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -13,7 +20,13 @@ export const useAsync = <TData, TError = unknown>(
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
 
-  const queryFnRef = useLatest<QueryFn<TData>>(queryFn);
+  const queryFnRef =
+    useLatest<
+      QueryFn<
+        TData,
+        { pageNumber: number; signal: AbortController["signal"] } & TParams
+      >
+    >(queryFn);
 
   const isNextAvailable = data
     ? getNextPageParam(data[data.length - 1])
