@@ -29,7 +29,6 @@ export const useAsync = <
         { pageNumber: number; signal: AbortController["signal"] } & TParams
       >
     >(queryFn);
-  const depsRef = useRef<TParams | null>(null);
 
   const isNextAvailable = data
     ? getNextPageParam(data[data.length - 1])
@@ -77,10 +76,6 @@ export const useAsync = <
       abortController.abort();
     };
   }, [queryFnRef, pageNumber, flag]);
-
-  useEffect(() => {
-    depsRef.current = deps;
-  }, [deps]);
 
   return useMemo(() => {
     return {
