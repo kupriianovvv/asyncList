@@ -36,19 +36,19 @@ export const useAsync = <
     : undefined;
 
   const [pageNumber, setPageNumber] = useState(1);
-
-  const pageRef = useRef(1);
-
   const getNewPage = () => {
     setPageNumber((prevNumber) => {
-      pageRef.current = prevNumber;
       return prevNumber + 1;
     });
   };
 
+  const pageRef = useRef(1);
+  useEffect(() => {
+    pageRef.current = pageNumber === 1 ? 1 : pageNumber - 1;
+  }, [pageNumber]);
+
   useEffect(() => {
     setPageNumber(1);
-    pageRef.current = 1;
     toggle();
   }, [deps]);
 
