@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 import { useUpdateEffect } from "./useUpdateEffect";
@@ -41,11 +41,6 @@ export const useAsync = <
     });
   };
 
-  const pageRef = useRef(1);
-  useEffect(() => {
-    pageRef.current = pageNumber === 1 ? 1 : pageNumber - 1;
-  }, [pageNumber]);
-
   useEffect(() => {
     setPageNumber(1);
     toggle();
@@ -57,7 +52,7 @@ export const useAsync = <
     queryFnRef
       .current({ pageNumber, signal: abortController.signal, ...deps })
       .then((data) => {
-        if (pageNumber === pageRef.current) {
+        if (pageNumber === 1) {
           setData([data]);
         } else {
           setData((prev) => [...(prev ?? []), data]);
