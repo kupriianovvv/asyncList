@@ -20,7 +20,7 @@ export const useAsync = <
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
-  const [flag, toggle] = useReducer((x) => !x, false);
+  const [flag, forceUpdate] = useReducer((x) => !x, false);
 
   const queryFnRef =
     useLatest<
@@ -43,7 +43,7 @@ export const useAsync = <
 
   useEffect(() => {
     setPageNumber(1);
-    toggle();
+    forceUpdate();
   }, [deps]);
 
   useUpdateEffect(() => {
