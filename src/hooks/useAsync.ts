@@ -29,7 +29,7 @@ export const useAsync = <
         { pageNumber: number; signal: AbortController["signal"] } & TParams
       >
     >(queryFn);
-  const searchRef = useRef<unknown>(null);
+  const depsRef = useRef<TParams | null>(null);
 
   const isNextAvailable = data
     ? getNextPageParam(data[data.length - 1])
@@ -55,7 +55,7 @@ export const useAsync = <
   useUpdateEffect(() => {
     setStatus("loading");
     const abortController = new AbortController();
-    if (searchRef.current !== deps) {
+    if (depsRef.current !== deps) {
       setPageNumber(1);
       setCounter((prev) => prev + 1);
     }
@@ -83,7 +83,7 @@ export const useAsync = <
   }, [queryFnRef, pageNumber, counter]);
 
   useEffect(() => {
-    searchRef.current = deps;
+    depsRef.current = deps;
   }, [deps]);
 
   return useMemo(() => {
