@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
+import { useUpdateEffect } from "./useUpdateEffect";
 
 export const useAsync = <
   TData,
@@ -51,8 +52,7 @@ export const useAsync = <
     setCounter((prev) => prev + 1);
   }, [deps]);
 
-  useEffect(() => {
-    if (counter === 1) return;
+  useUpdateEffect(() => {
     setStatus("loading");
     const abortController = new AbortController();
     if (searchRef.current !== deps) {
