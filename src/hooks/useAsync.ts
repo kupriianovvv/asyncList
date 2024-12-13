@@ -55,10 +55,6 @@ export const useAsync = <
   useUpdateEffect(() => {
     setStatus("loading");
     const abortController = new AbortController();
-    if (depsRef.current !== deps) {
-      setPageNumber(1);
-      setCounter((prev) => prev + 1);
-    }
     queryFnRef
       .current({ pageNumber, signal: abortController.signal, ...deps })
       .then((data) => {
