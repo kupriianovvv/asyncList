@@ -19,6 +19,7 @@ export const useAsync = <
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
+  const [counter, setCounter] = useState(1);
 
   const queryFnRef =
     useLatest<
@@ -27,6 +28,7 @@ export const useAsync = <
         { pageNumber: number; signal: AbortController["signal"] } & TParams
       >
     >(queryFn);
+  const searchRef = useRef<unknown>(null);
 
   const isNextAvailable = data
     ? getNextPageParam(data[data.length - 1])
@@ -43,14 +45,20 @@ export const useAsync = <
     });
   };
 
-  const resetPage = () => {
-    pageRef.current = 1;
+  useEffect(() => {
     setPageNumber(1);
-  };
+    pageRef.current = 1;
+    setCounter((prev) => prev + 1);
+  }, [deps]);
 
   useEffect(() => {
+    if (counter === 1) return;
     setStatus("loading");
     const abortController = new AbortController();
+    if (searchRef.current !== deps) {
+      setPageNumber(1);
+      setCounter((prev) => prev + 1);
+    }
     queryFnRef
       .current({ pageNumber, signal: abortController.signal, ...deps })
       .then((data) => {
@@ -62,6 +70,9 @@ export const useAsync = <
         setStatus("success");
       })
       .catch((error) => {
+        if (error.name === "AbortError") {
+          return;
+        }
         setError(error);
         setStatus("error");
       });
@@ -69,7 +80,11 @@ export const useAsync = <
     return () => {
       abortController.abort();
     };
-  }, [deps, queryFnRef, pageNumber]);
+  }, [queryFnRef, pageNumber, counter]);
+
+  useEffect(() => {
+    searchRef.current = deps;
+  }, [deps]);
 
   return useMemo(() => {
     return {
@@ -79,7 +94,6 @@ export const useAsync = <
       isNextAvailable,
       getNewPage,
       pageNumber,
-      resetPage,
     };
   }, [data, status, error, isNextAvailable, pageNumber]);
 };

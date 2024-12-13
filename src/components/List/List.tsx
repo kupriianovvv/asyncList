@@ -19,7 +19,7 @@ export const List = () => {
     () => ({ search: debouncedSearch }),
     [debouncedSearch]
   );
-  const { data, status, isNextAvailable, getNewPage, resetPage } = useAsync<
+  const { data, status, isNextAvailable, getNewPage } = useAsync<
     RawData,
     typeof params
   >(fetchPageByPageNumber, params, (data) => {
@@ -33,7 +33,6 @@ export const List = () => {
     () =>
       debounce((value) => {
         setDebouncedSearch(value);
-        resetPage();
       }, 400),
     []
   );
@@ -47,7 +46,6 @@ export const List = () => {
   const onReset = () => {
     setSearch("");
     setDebouncedSearch("");
-    resetPage();
   };
   const flattenedData = useFlattenData(data);
   return (
