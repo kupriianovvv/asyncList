@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { QueryFn } from "../types/queryFn";
 import { useLatest } from "./useLatest";
 import { useUpdateEffect } from "./useUpdateEffect";
@@ -20,7 +20,7 @@ export const useAsync = <
   );
   const [data, setData] = useState<TData[] | null>(null);
   const [error, setError] = useState<TError | null>(null);
-  const [counter, setCounter] = useState(1);
+  const [flag, toggle] = useReducer((x) => !x, false);
 
   const queryFnRef =
     useLatest<
@@ -49,7 +49,7 @@ export const useAsync = <
   useEffect(() => {
     setPageNumber(1);
     pageRef.current = 1;
-    setCounter((prev) => prev + 1);
+    toggle();
   }, [deps]);
 
   useUpdateEffect(() => {
@@ -76,7 +76,7 @@ export const useAsync = <
     return () => {
       abortController.abort();
     };
-  }, [queryFnRef, pageNumber, counter]);
+  }, [queryFnRef, pageNumber, flag]);
 
   useEffect(() => {
     depsRef.current = deps;
