@@ -8,10 +8,10 @@ export const fetchPageByPageNumber = <TData>({
   signal: AbortController["signal"];
 }) => {
   const data = fetch(
-    `https://swapi.dev/api/people/?search=${search}&page=${pageNumber}`,
+    `https://swapi.py4e.com/api/people/?search=${search}&page=${pageNumber}`,
     {
       signal,
-    },
+    }
   )
     .then((response) => {
       if (!response.ok) {
